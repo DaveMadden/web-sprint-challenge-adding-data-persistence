@@ -10,9 +10,13 @@ async function getProjects(){
     return rows;
 }
 
-//never called externally, but required to return desired result from createProject()
 async function getProjectById(id){
     const row = await db('projects as p').where('p.project_id', id).first()
+
+    if(row===undefined){ //if no project by this id, return null
+        return null
+    }
+    
     row.project_completed = Boolean(row.project_completed)
     return row;
 }
@@ -24,5 +28,6 @@ async function createProject(project){
 
 module.exports = {
     getProjects,
+    getProjectById,
     createProject
 };
