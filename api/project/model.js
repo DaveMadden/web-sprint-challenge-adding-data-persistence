@@ -1,12 +1,20 @@
 const db = require('../../data/dbConfig')
 
 async function getProjects(){
-    return await db('projects')
+    const rows = await db('projects')
+
+    rows.forEach(row => {
+        row.project_completed = Boolean(row.project_completed)
+    })
+
+    return rows;
 }
 
 //never called externally, but required to return desired result from createProject()
 async function getProjectById(id){
-    return await db('projects as p').where('p.project_id', id).first()
+    const row = await db('projects as p').where('p.project_id', id).first()
+    row.project_completed = Boolean(row.project_completed)
+    return row;
 }
 
 async function createProject(project){
